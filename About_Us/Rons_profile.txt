@@ -1,9 +1,0 @@
-Name:Ronald Heminway
-Major:Computer Engineering
-Year:Junior, Class of 2024
-E-mail: ronald.heminway@ku.edu
-Phone Number: (620) 491 - 0540
-Availble Times to Meet: MWF: After 3 PM TTH: After 4 PM Weekends: Available Often
-Relevant Courses: EECS 448, EECS 312, EECS 678, EECS 645, and EECS 563
-Programming Languages:C++, C#, Python
-Hobbies: Tennis, Badminton, Video Games, Hiking
