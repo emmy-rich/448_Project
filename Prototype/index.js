@@ -1,3 +1,5 @@
+import fetch from "node-fetch";
+globalThis.fetch = fetch;
 
 console.log("============== API Functions: =============");
 fetch('https://api.weather.gov/gridpoints/TOP/95,43/forecast')
