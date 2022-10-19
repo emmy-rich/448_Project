@@ -64,7 +64,7 @@ function main(temp) {
     if(temperature >=90) {
       console.log("HEAT ADVISORY: It's above 90 degrees, try to stay inside!\n")
     }
-  
+
   }
 //calling the functinos 
   console.log("\n========= Outfit Reccomendation: ==========\n");
