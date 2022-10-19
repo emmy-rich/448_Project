@@ -1,0 +1,7 @@
+offer multipple clothing choices 
+
+extract from first character so you can have results for winter
+
+have categroeis of seasons
+
+Neural Networks - 
