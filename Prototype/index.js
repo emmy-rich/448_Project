@@ -2,13 +2,24 @@ import fetch from "node-fetch";
 globalThis.fetch = fetch;
 
 console.log("============== API Functions: =============");
-fetch('https://api.weather.gov/gridpoints/TOP/95,43/forecast')
+fetch('https://api.weather.gov/gridpoints/TOP/95,43/forecast/hourly')
   .then(data => data.json())
   .then(data => {
-    const weather_data = data
+/*    const weather_data = data
       .properties
-      .periods[0].temperature;
-    main(weather_data);
+      .periods[1].temperature;
+    main(weather_data);*/
+
+	let weather_data = [];
+	let added_temperature = 0;
+	for (let i = 0; i<9;i++){
+	weather_data[i] = data.properties.periods[i].temperature;
+	added_temperature = added_temperature + weather_data[i];
+	}
+
+	let average_weather = added_temperature/9;
+	average_weather  =  Math.round((average_weather + Number.EPSILON)*100)/100
+	main(average_weather);
   });
 //main function 
 function main(temp) {
