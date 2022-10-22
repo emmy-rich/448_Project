@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+
 globalThis.fetch = fetch;
 
 console.log("============== API Functions: =============");
@@ -9,20 +10,51 @@ fetch('https://api.weather.gov/gridpoints/TOP/95,43/forecast/hourly')
       .properties
       .periods[1].temperature;
     main(weather_data);*/
-
-	let weather_data = [];
+	let TIMEFRAME = 9;
+	let weather_temperature = [];
+	let weather_forecast = [];
 	let added_temperature = 0;
-	for (let i = 0; i<9;i++){
-	weather_data[i] = data.properties.periods[i].temperature;
-	added_temperature = added_temperature + weather_data[i];
+	for (let i = 0; i<TIMEFRAME;i++){
+	weather_temperature[i] = data.properties.periods[i].temperature;
+	weather_forecast[i] = data.properties.periods[i].shortForecast;
+	added_temperature = added_temperature + weather_temperature[i];
 	}
+	let average_weather = added_temperature/TIMEFRAME;
+	average_weather  =  Math.round((average_weather + Number.EPSILON)*100)/100;
 
-	let average_weather = added_temperature/9;
-	average_weather  =  Math.round((average_weather + Number.EPSILON)*100)/100
-	main(average_weather);
+
+	//let weather_forecast = ["h","h","h","h","i","i","i","j","o"];
+
+	let weather_forecast_count= [];
+	let weather_forecast_mode = '';
+	let count_mostest = 0;
+	for (let i = 0;i< TIMEFRAME; i++){
+		let count = 0;
+		for(let j = 0 ;j< weather_forecast_count.length;j++){
+			if (weather_forecast[i] == weather_forecast_count[j]){
+			count =1;
+			}
+		}
+		if (count != 1){
+			let count_mode = 0;
+			for (let j = i ; j < TIMEFRAME;j++){
+				if (weather_forecast[i] == weather_forecast[j]){
+				count_mode++;
+				}
+			}
+			if (count_mode>0){
+				weather_forecast_count.push(weather_forecast[i]);
+			}
+			if (count_mostest < count_mode){
+				count_mostest = count_mode;
+				weather_forecast_mode = weather_forecast[i];
+			}
+		}
+	}
+	main(average_weather,weather_forecast_mode);
   });
 //main function 
-function main(temp) {
+function main(temp,forecast,alt) {
   let winter_tops = ["a long sleeve shirt", "a sweater"];
   let extra_layer = ["a jacket", "a coat"];
   let summer_tops = ["a t-shirt", "a tank top"];
@@ -43,7 +75,7 @@ function main(temp) {
       outfit = random_summer_top + " and " + random_summer_bottom;}
     else if(temperature>100){
       outfit = random_summer_top + " and " + random_summer_bottom;}
-  
+
   console.log("The temperature is " + temperature + " degrees, wear: " + outfit + ".\n"); 
   }
 //picks clothes for the outfit
@@ -81,4 +113,5 @@ function main(temp) {
   console.log("\n========= Outfit Reccomendation: ==========\n");
   daily_outfit(temp);
   reminders(temp);
+  console.log("The forecast will mostly be: " + forecast);
 };
