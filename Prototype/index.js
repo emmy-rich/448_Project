@@ -7,7 +7,7 @@ fetch('https://api.weather.gov/gridpoints/TOP/95,43/forecast/hourly')
   .then(data => data.json())
   .then(data => {
 /*    const weather_data = data
-      .properties
+      .properties 
       .periods[1].temperature;
     main(weather_data);*/
 	let TIMEFRAME = 9;
