@@ -54,7 +54,7 @@ fetch('https://api.weather.gov/gridpoints/TOP/95,43/forecast/hourly')
 	main(average_weather,weather_forecast_mode);
   });
 //main function 
-function main(temp,forecast,alt) {
+function main(temp,forecast) {
   let winter_tops = ["a long sleeve shirt", "a sweater"];
   let extra_layer = ["a jacket", "a coat"];
   let summer_tops = ["a t-shirt", "a tank top"];
