@@ -14,14 +14,22 @@ fetch('https://api.weather.gov/gridpoints/TOP/95,43/forecast/hourly')
 	let weather_temperature = [];
 	let weather_forecast = [];
 	let added_temperature = 0;
+	let weather_windSpeed = []
+	let added_windSpeed = 0;
 	for (let i = 0; i<TIMEFRAME;i++){
 	weather_temperature[i] = data.properties.periods[i].temperature;
 	weather_forecast[i] = data.properties.periods[i].shortForecast;
+	weather_windSpeed[i] = data.properties.periods[i].windSpeed;
 	added_temperature = added_temperature + weather_temperature[i];
+	added_windSpeed = added_windSpeed + weather_windSpeed[i];
 	}
+	//average temperature
 	let average_weather = added_temperature/TIMEFRAME;
 	average_weather  =  Math.round((average_weather + Number.EPSILON)*100)/100;
 
+	//average wind speeed
+	let average_windSpeed = weather_windSpeed[0];
+	//average_windSpeed = Math.round((average_windSpeed + Number.EPSILON)*100)/100;
 
 	//let weather_forecast = ["h","h","h","h","i","i","i","j","o"];
 
@@ -51,10 +59,10 @@ fetch('https://api.weather.gov/gridpoints/TOP/95,43/forecast/hourly')
 			}
 		}
 	}
-	main(average_weather,weather_forecast_mode);
+	main(average_weather,weather_forecast_mode,average_windSpeed);
   });
 //main function 
-function main(temp,forecast) {
+function main(temp,forecast,windSpeed) {
   let winter_tops = ["a long sleeve shirt", "a sweater"];
   let extra_layer = ["a jacket", "a coat"];
   let summer_tops = ["a t-shirt", "a tank top"];
@@ -76,7 +84,7 @@ function main(temp,forecast) {
     else if(temperature>100){
       outfit = random_summer_top + " and " + random_summer_bottom;}
 
-  console.log("The temperature is " + temperature + " degrees, wear: " + outfit + ".\n"); 
+  console.log("The temperature will be " + temperature + " degrees with a "+ forecast.toLowerCase() + " forecast with a "+ windSpeed+ " wind speed, wear: " + outfit + ".\n"); 
   }
 //picks clothes for the outfit
   function random_item(arr){
@@ -113,5 +121,4 @@ function main(temp,forecast) {
   console.log("\n========= Outfit Reccomendation: ==========\n");
   daily_outfit(temp);
   reminders(temp);
-  console.log("The forecast will mostly be: " + forecast);
 };
