@@ -84,7 +84,7 @@ function main(temp,forecast,windSpeed) {
     else if(temperature>100){
       outfit = random_summer_top + " and " + random_summer_bottom;}
 
-  console.log("The temperature will be " + temperature + " degrees with a "+ forecast.toLowerCase() + " forecast with a "+ windSpeed+ " wind speed, wear: " + outfit + ".\n"); 
+  console.log("The temperature will be " + temperature + " degrees with a "+ forecast.toLowerCase() + " forecast and a "+ windSpeed+ " wind speed, wear: " + outfit + ".\n"); 
   }
 //picks clothes for the outfit
   function random_item(arr){
