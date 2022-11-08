@@ -87,16 +87,16 @@ class Weather {
     return snow;
   }
   setTemperature(temperature) {
-    
+    this.temperature 
   }
   setWindSpeed(windSpeed) {
     this.windSpeed = windSpeed;
   }
   setHumidity(humidity) {
-    
+    this.humidity = humidity;
   }
   setRain(rain) {
-    
+    this.rain = rain;
   }
   setSnow(snow) {
     
