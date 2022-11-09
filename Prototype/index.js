@@ -2,6 +2,71 @@ import fetch from "node-fetch";
 
 globalThis.fetch = fetch;
 
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
+
+async function office(zipcode){
+
+	let listOfOffices = ["AKQ", "ALY", "BGM", "BOX", "BTV", "BUF", "CAE", "CAR", "CHS", "CLE", "CTP", "GSP", "GYX", "ILM", "ILN", "LWX", "MHX", "OKX", "PBZ", "PHI", "RAH", "RLX", "RNK", "ABQ", "AMA", "BMX", "BRO", "CRP", "EPZ", "EWX", "FFC", "FWD", "HGX", "HUN", "JAN", "JAX", "KEY", "LCH", "LIX", "LUB", "LZK", "MAF", "MEG", "MFL", "MLB", "MOB", "MRX", "OHX", "OUN", "SHV", "SJT", "SJU", "TAE", "TBW", "TSA", "ABR", "APX", "ARX", "BIS", "BOU", "CYS", "DDC", "DLH", "DMX", "DTX", "DVN", "EAX", "FGF", "FSD", "GID", "GJT", "GLD", "GRB", "GRR", "ICT", "ILX", "IND", "IWX", "JKL", "LBF", "LMK", "LOT", "LSX", "MKX", "MPX", "MQT", "OAX", "PAH", "PUB", "RIW", "SGF", "TOP", "UNR", "BOI", "BYZ", "EKA", "FGZ", "GGW", "HNX", "LKN", "LOX", "MFR", "MSO", "MTR", "OTX", "PDT", "PIH", "PQR", "PSR", "REV", "SEW", "SGX", "SLC", "STO", "TFX", "TWC", "VEF", "AER", "AFC", "AFG", "AJK", "ALU", "GUM", "HPA", "HFO", "PPG", "STU", "NH1", "NH2", "ONA", "ONP"];
+
+        let closestDistance = 1000;
+	let closestOffice = ''
+
+	for (let i = 0;i<listOfOffices.length;i++){
+
+	let url = ("https://api.weather.gov/offices/" + listOfOffices[i])
+
+	/*while(1){
+
+	let status = await fetch(url);
+	if (status.status == 200)
+		break
+	}*/
+
+	await fetch(url)
+        	.then(datas => datas.json())
+        	.then(datas => {
+
+		if (datas.status == 404)
+			return 0;
+
+		let zipCodeArray;
+		let officeZipCode;
+		let distance;
+
+		let temp = null;
+
+		temp = datas.address.postalCode;
+		//console.log(listOfOffices[i]);
+		if(temp.length>5)
+		{
+		zipCodeArray = temp.split("-");
+		officeZipCode = parseInt(zipCodeArray[0]);
+		}
+		else
+		{
+		officeZipCode = temp;
+		}
+
+		distance = Math.abs(zipcode - officeZipCode);
+
+		if (closestDistance > distance)
+		{
+			closestDistance = distance;
+			closestOffice = listOfOffices[i];
+		}
+		});
+	}
+	console.log(closestOffice);
+
+}
+
+
 console.log("============== API Functions: =============");
 fetch('https://api.weather.gov/gridpoints/TOP/95,43/forecast/hourly')
   .then(data => data.json())
@@ -59,9 +124,12 @@ fetch('https://api.weather.gov/gridpoints/TOP/95,43/forecast/hourly')
 			}
 		}
 	}
+	let zipcode = 67068;
+	office(zipcode);
 	main(average_weather,weather_forecast_mode,average_windSpeed);
   });
-//main function 
+
+//main function
 function main(temp,forecast,windSpeed) {
   let winter_tops = ["a long sleeve shirt", "a sweater"];
   let extra_layer = ["a jacket", "a coat"];
