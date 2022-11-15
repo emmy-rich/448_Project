@@ -23,6 +23,9 @@ XDG_CONFIG_HOME = "/home/runner/.config"
 PATH = "/home/runner/$REPL_SLUG/.config/npm/node_global/bin:/home/runner/$REPL_SLUG/node_modules/.bin"
 npm_config_prefix = "/home/runner/$REPL_SLUG/.config/npm/node_global"
 
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix", ".config"]
+
 [packager]
 language = "nodejs"
 
@@ -33,12 +36,6 @@ language = "nodejs"
 
 [unitTest]
 language = "nodejs"
-
-[languages.javascript]
-pattern = "**/{*.js,*.jsx,*.ts,*.tsx}"
-
-  [languages.javascript.languageServer]
-  start = [ "typescript-language-server", "--stdio" ]
 
 [debugger]
 support = true
@@ -79,3 +76,11 @@ support = true
       sourceMaps = true
       stopOnEntry = false
       type = "pwa-node"
+
+[languages]
+
+[languages.javascript]
+pattern = "**/{*.js,*.jsx,*.ts,*.tsx}"
+
+[languages.javascript.languageServer]
+start = "typescript-language-server --stdio"

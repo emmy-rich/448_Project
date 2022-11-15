@@ -10,9 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mysql": "^2.18.1",
+    "@types/node": "^18.0.6",
     "node-fetch": "^3.2.6",
-    "python": "^0.0.4",
     "sqlite3": "^5.1.2"
   }
 }
