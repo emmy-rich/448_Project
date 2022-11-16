@@ -1,7 +1,5 @@
-offer multipple clothing choices 
+2 Infinite Loops best idea ever won't go Ron
 
-extract from first character so you can have results for winter
-
-have categroeis of seasons
-
-Neural Networks - 
+first have login menu with login validation 
+if successful login then call driver menu 
+then in driver menu if you log out then it pulls up login menu or the option to exit program 
