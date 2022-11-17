@@ -1,5 +1,5 @@
-2 Infinite Loops best idea ever won't go Ron
-
-first have login menu with login validation 
-if successful login then call driver menu 
-then in driver menu if you log out then it pulls up login menu or the option to exit program 
+1. Figure out loops
+2. Re-format strings for clothing
+3. after outfit is generated, prompt with "will you wear?", if yes, call wear() 
+    if no take back to menu 
+4. Get rid of the print statements for closed database and connected database 

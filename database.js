@@ -53,8 +53,7 @@ function wear(article, username) {
         let closetValueString = JSON.stringify(row);
         let closetValue = parseInt(closetValueString.replace(/[^0-9]*/g, ''));
         //decrement the value in the closet if possible
-        if(closetValue > 0)
-        {
+        if (closetValue > 0) {
           closetValue--;
           //update the value for the given article parameter within the specific user's closet table to reflect the new value calculated above
           db.run(`UPDATE closet SET ${article} = ${closetValue} WHERE user_id IN (SELECT user_id FROM user_info WHERE username = '${username}')`)
@@ -139,7 +138,7 @@ function remove(article, username) {
     }
     console.log('Connected to the in-memory SQlite database.');
   });
-//gets the article related to the id for the inputed username
+  //gets the article related to the id for the inputed username
   db.serialize(() => {
     db.each(`SELECT closet.${article} FROM closet INNER JOIN user_info ON closet.user_id = user_info.user_id WHERE user_info.username = '${username}'`, (err, row) => {
       if (err) {
@@ -213,7 +212,7 @@ function getLaundry(username) {
 }
 
 //checks to make sure there is data for that specific articl 
-function checkData(article, username){
+function checkData(article, username) {
   //create a connection to the database
   let db = new sqlite3.Database('reelcoloset', (err) => {
     if (err) {
@@ -222,19 +221,26 @@ function checkData(article, username){
     console.log('Connected to the in-memory SQlite database.');
   });
   //creates a promise, and looks through the closet for a specific article 
-  //of clothiing for a specific username
+  //of clothing for a specific username
   return new Promise((resolve, reject) => {
     db.serialize(() => {
-      db.all(`SELECT closet.${article} FROM closet INNER JOIN user_info ON closet.user_id = user_info.user_id WHERE user_info.username = '${username}'`, (err, row) => { 
-      if (err) {
-        reject(err);
-      } //if there is no error then the amount of that article of clothing gets 
+      db.all(`SELECT ${article} FROM closet INNER JOIN user_info ON closet.user_id = user_info.user_id WHERE user_info.username = '${username}'`, (err, row) => {
+        if (err) {
+          reject(err);
+        } //if there is no error then the amount of that article of clothing gets 
         //returned from the database
-      let countString = JSON.stringify(row);
-      count = parseInt(countString.replace(/[^0-9]*/g, ''));
-      row = count;
-      resolve(row);
-  });
+        console.log("The row is: " + row);
+        let countString = JSON.stringify(row);
+        console.log("This is the count of string: " + countString);
+        if(countString.length != 0){
+          count = parseInt(countString.replace(/[^0-9]*/g, ''));
+          row = count;
+          resolve(row);
+        }
+        else {
+          console.log("uh oh");
+        }
+      });
       //close the connection to the database
       db.close();
       console.log('Closed the database connection.');
@@ -309,8 +315,8 @@ function addUser(username, password, email, zipcode, lat, long, station) {
 
 //returns 0 if username and password combo is not in database 
 //and 1 if username and password combo is in database
- function validateLogin(username, password) { 
-   //create a connection to the database
+function validateLogin(username, password) {
+  //create a connection to the database
   let db = new sqlite3.Database('reelcoloset', (err) => {
     if (err) {
       return console.error(err.message);
@@ -322,26 +328,26 @@ function addUser(username, password, email, zipcode, lat, long, station) {
     db.serialize(() => {
       //returns the number of users with the username and password entered in by the user
       db.all(`SELECT COUNT(*) FROM user_info WHERE user_id IN (SELECT user_id FROM user_info WHERE username = '${username}' AND password = '${password}')`, (err, row) => {
-      if (err) {
-        reject(err);
-      }
+        if (err) {
+          reject(err);
+        }
         //turn the output into a string and parse the integer from it
-      let countString = JSON.stringify(row);
-      count = parseInt(countString.replace(/[^0-9]*/g, ''));
-      row = count;
+        let countString = JSON.stringify(row);
+        count = parseInt(countString.replace(/[^0-9]*/g, ''));
+        row = count;
         //return either 0 or 1
-      resolve(row);
-  });
+        resolve(row);
+      });
       //close the connection to the database
       db.close();
       console.log('Closed the database connection.');
     })
   })
-  
+
 }
 
-function getInfo(username, info) { 
-   //create a connection to the database
+function getInfo(username, info) {
+  //create a connection to the database
   let db = new sqlite3.Database('reelcoloset', (err) => {
     if (err) {
       return console.error(err.message);
@@ -352,22 +358,51 @@ function getInfo(username, info) {
   return new Promise((resolve, reject) => {
     db.serialize(() => {
       //returns the number of users with the username and password entered in by the user
-      db.all(`SELECT ${info} FROM user_info WHERE username = ${username})`, (err, row) => {
-      if (err) {
-        reject(err);
-      }
-        //turn the output into a string and parse the integer from it
+      db.each(`SELECT ${info} FROM user_info WHERE username = '${username}'`, (err, row) => {
+
+        if (err) {
+          reject(err);
+        }
+        //turn the output into a string
         row = JSON.stringify(row);
-      
-        //return either 0 or 1
-      resolve(row);
-  });
+        resolve(row);
+      });
       //close the connection to the database
       db.close();
-      console.log('Closed the database connection.');
+      console.log('Closed the database connection2.');
     })
   })
-  
+
 }
 
-module.exports = { createTables, wear, clean, add, remove, getCloset, getLaundry, addUser, validateLogin, checkData, getInfo };
+function getArticle(username, article) {
+  //create a connection to the database
+  let db = new sqlite3.Database('reelcoloset', (err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Connected to the in-memory SQlite database.');
+  });
+
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      //returns the number of users with the username and password entered in by the user
+      db.each(`SELECT ${article} FROM closet INNER JOIN user_info ON closet.user_id = user_info.user_id WHERE user_info.username = '${username}'`, (err, row) => {
+
+        if (err) {
+          reject(err);
+        }
+        //turn the output into a string
+        row = JSON.stringify(row);
+        resolve(row);
+        console.log(row);
+      });
+      //close the connection to the database
+      db.close();
+      console.log('Closed the database connection2.');
+    })
+  })
+
+}
+
+module.exports = { createTables, wear, clean, add, remove, getCloset, getLaundry, addUser, validateLogin, checkData, getInfo, getArticle };
