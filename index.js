@@ -5,7 +5,7 @@ loginDriver();
 //displays the different menu options for the user to choose from
 function displayMainMenu() {
   console.log('\n' + "====REEL COLOSET MENU====" + '\n');
-  let options = ['1) View Daily Outfit', '2) View Closet', '3) Add Item to Closet', '4) Remove Item from Closet', '5) View Laundry', '6) Wash Laundry', '7) View Profile', '8) Logout', '9) Clear console'];
+  let options = ['1) View Daily Outfit', '2) View Closet', '3) Add Item to Closet', '4) Remove Item from Closet', '5) View Laundry', '6) Wash Laundry', '7) View Profile', '8) Logout', '9) Clear console\n'];
   for (let i = 0; i < options.length; i++) {
     console.log(options[i]);
   }
@@ -52,7 +52,7 @@ function driver(user){
     let stop = false;
     let stop_out_loop = false;
      displayMainMenu();
-      let input2 = prompt("\nPlease select an action to perform(1-9): ");
+      let input2 = prompt("Please select an action to perform(1-9): ");
       //if option 1 is selected, user's daily outfit is generated
       if(input2 == 1){
         username = user.getUsername();
