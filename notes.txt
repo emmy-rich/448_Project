@@ -1,5 +1,23 @@
 1. Figure out loops
-2. Re-format strings for clothing
+
+
+~~Done?~~~2. Re-format strings for clothing
+
 3. after outfit is generated, prompt with "will you wear?", if yes, call wear() 
     if no take back to menu 
-4. Get rid of the print statements for closed database and connected database 
+
+4. Get rid of the print statements for closed database and connected database -- done
+
+5. try catch for the api working or not so that the program will say 
+  try again the api is not working 
+    - All API CALLS have been made to infinitily retry until success 
+    - please refer to step 6
+
+6. giveup after x amount of tries on all api calls
+    - 3 tries should be the magic number before error is thrown
+    - implemented, but not tested. 
+
+
+--re-test all menu items
+--figure out loops
+--clean

@@ -7,7 +7,6 @@ function createTables() {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
   db.serialize(() => {
     //Creates the user_info table within the database with a primary key for the user_id so that it can be connected to other tables, unique username, and text and int fields for password, email, zipcode, latitude, longitude and the local weather station.
@@ -28,7 +27,6 @@ function createTables() {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Closed the database connection.');
   });
 }
 
@@ -39,7 +37,6 @@ function wear(article, username) {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
 
   db.serialize(() => {
@@ -70,14 +67,12 @@ function wear(article, username) {
               db.run(`UPDATE laundry SET ${article} = ${laundryValue} WHERE user_id IN (SELECT user_id FROM user_info WHERE username = '${username}')`)
               //close the database connection 
               db.close();
-              console.log('Closed the database connection.');
             })
           })
         }
         else {
           //close the database connection if the closet value is less than 0
           db.close();
-          console.log('Closed the database connection.');
         }
       })
     })
@@ -91,7 +86,6 @@ function clean(article, username) {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
   //gets the article from the launrdy row that is connected to the user id for the inputted username
   db.serialize(() => {
@@ -121,7 +115,6 @@ function clean(article, username) {
             db.run(`UPDATE closet SET ${article} = ${closetValue} WHERE user_id IN (SELECT user_id FROM user_info WHERE username = '${username}')`)
             //closes the connection to the database
             db.close();
-            console.log('Closed the database connection.');
           })
         })
       })
@@ -136,7 +129,6 @@ function remove(article, username) {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
   //gets the article related to the id for the inputed username
   db.serialize(() => {
@@ -156,7 +148,6 @@ function remove(article, username) {
       })
       //closes the connection to the database
       db.close();
-      console.log('Closed the database connection.');
     })
   });
 }
@@ -168,7 +159,6 @@ function getCloset(username) {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
   //selects every type of article from the closet for that user
   db.serialize(() => {
@@ -182,7 +172,6 @@ function getCloset(username) {
     })
     //close connection to database
     db.close();
-    console.log('Closed the database connection.');
   })
 }
 
@@ -193,7 +182,6 @@ function getLaundry(username) {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
   //selects every type of article in the laundry 
   db.serialize(() => {
@@ -207,7 +195,6 @@ function getLaundry(username) {
     })
     //closes the connection to the database
     db.close();
-    console.log('Closed the database connection.');
   })
 }
 
@@ -218,7 +205,6 @@ function checkData(article, username) {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
   //creates a promise, and looks through the closet for a specific article 
   //of clothing for a specific username
@@ -243,7 +229,6 @@ function checkData(article, username) {
       });
       //close the connection to the database
       db.close();
-      console.log('Closed the database connection.');
     })
   })
 }
@@ -255,7 +240,6 @@ function add(article, username) {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
 
   //gets the article from the closet associated with the id for the user
@@ -275,7 +259,6 @@ function add(article, username) {
       })
       //closes the connection to the database
       db.close();
-      console.log('Closed the database connection.');
     })
   });
 }
@@ -285,20 +268,20 @@ function addUser(username, password, email, zipcode, lat, long, station) {
   //connects to the database
   let db = new sqlite3.Database('reelcoloset', (err) => {
     if (err) {
-      return console.error(err.message);
+      return console.error(err.message + "error here at 271");
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
   //Inserts all of the users information into the user information table, which makes a new user
   db.serialize(() => {
     db.run(`INSERT INTO user_info(username, password, email, zipcode, lat, long, station) VALUES('${username}', '${password}', '${email}', ${zipcode}, ${lat}, ${long}, '${station}')`)
     //gets the user id correlating with the username
+    // try{
     db.each(`SELECT user_id FROM user_info WHERE username = '${username}'`, (err, row) => {
       if (err) {
-        throw err;
+        return console.error("Username or email is already taken. Try again \n");
       }
-      //creates a tables for the closet and laundry to be associated with the new user id
-      db.serialize(() => {
+      else {
+        db.serialize(() => {
         let id = JSON.stringify(row);
         id = parseInt(id.replace(/[^0-9]*/g, ''));
         db.run(`INSERT INTO closet(user_id)
@@ -307,11 +290,53 @@ function addUser(username, password, email, zipcode, lat, long, station) {
               VALUES(${id})`)
         //closes the connection to the database
         db.close();
-        console.log('Closed the database connection.');
       })
-    })
+    }
+      })
+      //creates a tables for the closet and laundry to be associated with the new user id
+      
+    // }
+    // catch(err){
+    //   console.log("Username or email is already taken. Try again \n");
+    // }
   })
 }
+
+
+
+// function addUser2(username, password, email, zipcode, lat, long, station) {
+//   //connects to the database
+//   let db = new sqlite3.Database('reelcoloset', (err) => {
+//     if (err) {
+//       return console.error(err.message);
+//     }
+//   });
+//   //Inserts all of the users information into the user information table, which makes a new user
+//   db.serialize(() => {
+//     db.run(`INSERT INTO user_info(username, password, email, zipcode, lat, long, station) VALUES('${username}', '${password}', '${email}', ${zipcode}, ${lat}, ${long}, '${station}')`)
+//     //gets the user id correlating with the username
+//     db.each(`SELECT user_id FROM user_info WHERE username = '${username}'`, (err, row) => {
+//       if (err) {
+//         throw err;
+//       }
+//       //creates a tables for the closet and laundry to be associated with the new user id
+//       db.serialize(() => {
+//         let id = JSON.stringify(row);
+//         id = parseInt(id.replace(/[^0-9]*/g, ''));
+//         db.run(`INSERT INTO closet(user_id)
+//               VALUES(${id})`)
+//         db.run(`INSERT INTO laundry(user_id)
+//               VALUES(${id})`)
+//         //closes the connection to the database
+//         db.close();
+//       })
+//     })
+    
+//   })
+// }
+
+
+
 
 //returns 0 if username and password combo is not in database 
 //and 1 if username and password combo is in database
@@ -321,7 +346,6 @@ function validateLogin(username, password) {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
 
   return new Promise((resolve, reject) => {
@@ -340,7 +364,6 @@ function validateLogin(username, password) {
       });
       //close the connection to the database
       db.close();
-      console.log('Closed the database connection.');
     })
   })
 
@@ -352,7 +375,6 @@ function getInfo(username, info) {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
 
   return new Promise((resolve, reject) => {
@@ -369,7 +391,6 @@ function getInfo(username, info) {
       });
       //close the connection to the database
       db.close();
-      console.log('Closed the database connection2.');
     })
   })
 
@@ -381,7 +402,6 @@ function getArticle(username, article) {
     if (err) {
       return console.error(err.message);
     }
-    console.log('Connected to the in-memory SQlite database.');
   });
 
   return new Promise((resolve, reject) => {
@@ -399,7 +419,6 @@ function getArticle(username, article) {
       });
       //close the connection to the database
       db.close();
-      console.log('Closed the database connection2.');
     })
   })
 

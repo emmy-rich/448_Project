@@ -1,70 +1,89 @@
 const db = require("./database.js");
-//loginDriver();
-//db.createTables();
-//printClothesArt("a sweater", 50);
-//latitude('filthywench', 'y0urm0m', 'filthywench@gmail.com', 68007);
-//verify('filthywench', 'y0urm0m');
-// db.getInfo('filthywench', 'email');
-//db.add('sweater','filthywench');
-//db.add('sweats', 'filthywench');
-checkWeather('filthywench',73,64,'OAX');
-// db.getArticle('filthywench', 'jeans');
-//db.checkData('jeans', 'filthywench');
-//db.getCloset('filthywench');
+
+loginDriver();
+// // latitude('george2', 'sup', 'hi@hi.net',66604);
 //displays the different menu options for the user to choose from
 function displayMainMenu() {
+  console.log('\n' + "====REEL COLOSET MENU====" + '\n');
   let options = ['1) View Daily Outfit', '2) View Closet', '3) Add Item to Closet', '4) Remove Item from Closet', '5) View Laundry', '6) Wash Laundry', '7) View Profile', '8) Logout', '9) Clear console'];
   for (let i = 0; i < options.length; i++) {
     console.log(options[i]);
   }
 }
 
-
+//calls the login menu function and interprets the users input
 function loginDriver(){
   let stop = false;
-  do{
+  while(stop == false){
     displayLoginMenu();
-    let input1 = prompt("Please select an action to perform an action to perform (1, 2, or 3): "); 
+    //if option 1 is selected, the user is asked to input username and password
+    let input1 = prompt("Please select an action to perform (1, 2, or 3): "); 
     if(input1 == 1){
       let username = prompt("Username: ");
       let password = prompt("Password: ");
-      verify(username, password);
+
+      setTimeout(function(){ verify(username, password); }, 5000);//verify username after 5 seconds 
+      stop = true;
     }
+      //if option 2 is selected, the user is asked info to create their account
     else if(input1 == 2){
         let username = prompt("Username: "); 
         let password = prompt("Password: ");
         let email = prompt("Email: ");
         let zipcode = prompt("Zipcode: ");
+        zipcode = parseInt(zipcode);
         latitude(username, password, email, zipcode);
     }
+      //if option 3 is selected, exit the do while loop
     else if(input1 == 3){
+      console.log("\nThank you for using our program!  Goodbye!");
       stop = true;
     }
+      
     else{
-      console.log("Please enter a valid input");
+      console.log("\nPlease enter a valid input\n");
     }
-  }while(stop == false);
+  }
   return;
 }
+
+//main driver displays the main menu and interprets the users input
 function driver(user){
-    let loggedin = true;
-    while(loggedin == true){
-      displayMainMenu();
-      let input2 = prompt("Please select an action to perform(1-9): ")
+    let stop = false;
+    let stop_out_loop = false;
+     displayMainMenu();
+      let input2 = prompt("\nPlease select an action to perform(1-9): ");
+      //if option 1 is selected, user's daily outfit is generated
       if(input2 == 1){
-            console.log("Daily Outfit: ");
+        username = user.getUsername();
+         user.generateOutfit(username); 
+        stop = true;
       }
+      //if option 2 is selected, the user's closet items are displayed
       else if(input2 == 2){
-        console.log(user);
         user.getCloset();
+        stop = true;
       }
+      //
       else if(input2 == 3){
-        let art = prompt("What article would you like to add? ");
-        user.add(art);
+        console.log("Clothing Options: long_sleeve_shirt, sweater, t_shirt, tank_top, sweats, winter_skirt, jeans, skirt, jacket, coat, summer_hat, or winter_hat\n");
+        let art = prompt("Which article would you like to add?: ");
+        //checks for valid input
+        if(art == 'long_sleeve_shirt' || art == 'sweater'|| art== 't_shirt' || art== 'tank_top'|| art== 'sweats' || art== 'winter_skirt'|| art== 'jeans' || art== 'skirt'|| art== 'jacket'|| art== 'coat'|| art== 'summer_hat' || art =='winter_hat') {
+          user.add(art);
+        }
+        else{
+          console.log("Invalid input please make sure you have typed it correctly (underscores are necessary)\n");
+        }
       }
       else if(input2 == 4){
-        let art = prompt("What article would you like to remove? "); 
-        user.remove(art);
+        console.log("Clothing Options: long_sleeve_shirt, sweater, t_shirt, tank_top, sweats, winter_skirt, jeans, skirt, jacket, coat, summer_hat, or winter_hat\n");
+        let art = prompt("Which article would you like to remove?: ");
+        if(art == 'long_sleeve_shirt' || art == 'sweater'|| art== 't_shirt' || art== 'tank_top'|| art== 'sweats' || art== 'winter_skirt'|| art== 'jeans' || art== 'skirt'|| art== 'jacket'|| art== 'coat'|| art== 'summer_hat' || art =='winter_hat') {
+        user.remove(art);}
+        else{
+          console.log("Invalid input please make sure you have typed it correctly (underscores are necessary)\n");
+        }
       }
       else if(input2 == 5){
          user.getLaundry();
@@ -79,30 +98,33 @@ function driver(user){
           console.log("Email: " + user.getEmail());
       }
       else if(input2 == 8){
-        console.log("Successfully logged out!");
-        //delete user;
+        console.log("\nSuccessfully logged out!\n");
         loginDriver();
-        loggedin == false;
+        stop_out_loop = true;
       }
       else if(input2 == 9){
         console.clear();
       }
       else{
-        console.log("Please enter a valid input")
+        console.log("\nPlease enter a valid input\n")
+        driver(user);
       }
-    }
+    if(input2 == 1 || input2==2 ||input2==3||input2==4||input2==5 || input2==6 ||input2==7 ||input2==9){
+        setTimeout(function(){ driver(user); }, 4000);
+      } 
+  stop = false;
 }
 
 //displays the login or create account options to the user
 function displayLoginMenu(){
+  displayLogo();
   console.log('1) Login');
   console.log('2) Create New User');
-  console.log('3) Quit');
+  console.log('3) Quit \n');
 }
 
 //clears the console and displays the 'reelcoloset' logo to the console
 function displayLogo() {
-  console.clear();
   console.log(`
 
                                                               __
@@ -133,14 +155,17 @@ function verify (username, password) {
 //1 = yes, 0 = no
 function logIn (num, username, password) {
   if (num == 1) {
-    console.log("Login Successful!");
+    console.log("\nLogin Successful!");
     emailFormat(username, password);
   }
   else {
-    console.log("Invalid username or password.");
+    console.clear();
+    console.log("\nInvalid username or password.\n");
+    loginDriver();
   }
 }
 
+//formats the user's email address
 function emailFormat(username, password){
   
   let promise = db.getInfo(username, 'email')
@@ -151,6 +176,7 @@ function emailFormat(username, password){
   })
 }
 
+//formats the user's zipcode, by turning it into an integer
 function zipFormat(username, password, email) {
   let promise = db.getInfo(username, 'zipcode')
   .then((results) => {
@@ -159,6 +185,7 @@ function zipFormat(username, password, email) {
   })
 }
 
+//formats the user's latitude, by turning it into an integer
 function latFormat(username, password, email, zipcode) {
   let promise = db.getInfo(username, 'lat')
   .then((results) => {
@@ -167,6 +194,7 @@ function latFormat(username, password, email, zipcode) {
   })
 }
 
+//formats the user's longitude, by turning it into an integer
 function longFormat(username, password, email, zipcode, lat) {
   let promise = db.getInfo(username, 'long')
   .then((results) => {
@@ -175,6 +203,7 @@ function longFormat(username, password, email, zipcode, lat) {
   })
 }
 
+//formats the user's station id 
 function stationFormat(username, password, email, zipcode, lat, long) {
   let promise = db.getInfo(username, 'station')
     .then((results) => {
@@ -184,6 +213,8 @@ function stationFormat(username, password, email, zipcode, lat, long) {
       driver(user);
   })
 }
+//create a global variable that will be adjusted after each api call
+var apiCounter =0;
 
 //gets the latitude for a zipcode using an API
 async function latitude(username, password, email, zipcode){
@@ -193,8 +224,26 @@ async function latitude(username, password, email, zipcode){
     await fetch(url)
             .then(data => data.json())
             .then(data=> {
-             let latitude_ = (data.lat);
-              longitude(username, password, email, zipcode, latitude_);
+                  if (apiCounter == 3)
+                  {
+                    console.log("\nFailed after three attempts. Closing.../n");
+                  }
+              //console.log("apiCounter for latitude: " + apiCounter);
+              
+              //api function calls itself if api call fails and api counter is less than 3
+              if ((data.lat === undefined)&&(apiCounter<3)){
+                //increment apiCounter
+               apiCounter = apiCounter+1;
+                latitude(username, password, email, zipcode);
+              }
+              else{
+                //reset apiCounter
+                //console.log("apiCounter after entering Succesful branch (latitude): "+ apiCounter);
+                apiCounter = 0;
+                //console.log("apiCounter after reinitisializing to 0 (latitude): "+ apiCounter);
+                let latitude_ = (data.lat);
+                longitude(username, password, email, zipcode, latitude_);
+              }
             });
 }
 
@@ -206,9 +255,26 @@ async function longitude(username, password, email, zipcode, latitude){
     await fetch(url)
             .then(data => data.json())
             .then(data=> {
-
-        let longitude_ = (data.lng);
-        station(username, password, email, zipcode, latitude, longitude_);
+                  if (apiCounter == 3)
+                  {
+                    console.log("\nFailed after three attempts. Closing...\n");
+                  }
+              //console.log("apiCounter for longitude: " + apiCounter);
+              
+              //api function calls itself if api call fails and api counter is less than 3
+              if ((data.lng === undefined)&&(apiCounter<3)){
+                //increment apiCounter
+                apiCounter = apiCounter+1;
+                longitude(username, password, email, zipcode);
+              }
+              else{
+                //reset apiCounter
+                //console.log("apiCounter after entering Succesful branch (longitude): "+ apiCounter);
+                apiCounter = 0;
+                //console.log("apiCounter after reinitisializing to 0 (longitude): "+ apiCounter);
+                let longitude_ = (data.lng);
+                station(username, password, email, zipcode, latitude, longitude_);
+              }
   });
 }
 
@@ -218,28 +284,55 @@ async function station(username, password, email, zipcode, latitude, longitude){
   await fetch(url)
         .then(data => data.json())
         .then(data=> {
-          let gridX = (data.properties.gridX);
-          let gridY = (data.properties.gridY);
-          let station = (data.properties.gridId);
-
-           db.addUser(username, password, email, zipcode, gridX, gridY, station);
+              
+              //console.log("apiCounter for station: " + apiCounter);
+                  if (apiCounter == 3)
+                  {
+                    console.log("\nFailed after three attempts. Closing...\n");
+                  }       
+          //api function calls itself if api call fails and api counter is less than 3
+          if ((data.status >=400)&&(apiCounter<3)){
+            //increment apiCounter
+            apiCounter = apiCounter+1;
+            station(username, password, email, zipcode, latitude, longitude);
+          }
+          else{
+            //reset apiCounter
+                //console.log("apiCounter after entering Succesful branch (station): "+ apiCounter);
+                apiCounter = 0;
+                //console.log("apiCounter after reinitisializing to 0 (station): "+ apiCounter);
+            let gridX = (data.properties.gridX);
+            let gridY = (data.properties.gridY);
+            let station = (data.properties.gridId);
+            db.addUser(username, password, email, zipcode, gridX, gridY, station);
+          }
         });
 }
 
 //fetches the weather forecast for a specific user from the api using the longitude, latitude, and local station
 async function checkWeather(username, gridX, gridY, station) {
-
   let xGrid = gridX.toString();
   let yGrid = gridY.toString();
   let url = "https://api.weather.gov/gridpoints/"+station+"/"+xGrid+","+yGrid+"/forecast/hourly";
-  //let url = "https://api.weather.gov/gridpoints/OAX/73,64/forecast/hourly";
-//  await fetch(`https://api.weather.gov/gridpoints/${station}/${gridX},${gridY}/forecast/hourly`);
   await fetch(url)
   .then(data => data.json())
-  .then(data => {
-
+  .then(data => {       
+    if (apiCounter == 3)
+    {
+      console.log("\nFailed after three attempts. Closing...\n");
+    }
+    //if for some reason the api does not fully process, it instead calls itself again to try and force the api to properly load
+		if ((data.status >= 400)&&(apiCounter<3)){
+      //increment apiCounter
+      apiCounter = apiCounter+1;
+			checkWeather(username,gridX,gridY,station);
+    }
+    //if the weather api finally returns something the program continues
+	  else{
+    //reset apiCounter
+      apiCounter = 0;
     //time frame has been agreed to be 9
-	  let TIMEFRAME = 9;
+    let TIMEFRAME = 9;
     //temerature of location array
   	let weather_temperature = [];
     //forecast of location array
@@ -265,7 +358,7 @@ async function checkWeather(username, gridX, gridY, station) {
   	//average temperature
   	let average_weather = added_temperature/TIMEFRAME;
     average_weather  =  Math.round((average_weather + Number.EPSILON)*100)/100;
-    console.log(`The average weather is: ${average_weather}`);
+    console.log(`\nThe average weather is: ${average_weather} \n`);
   
   	//average wind speeed
     for (let i =0; i<TIMEFRAME; i++)
@@ -282,7 +375,7 @@ async function checkWeather(username, gridX, gridY, station) {
   	let average_windSpeed = added_windSpeed/TIMEFRAME;
     //rounding to two decimal places
   	average_windSpeed = Math.round((average_windSpeed + Number.EPSILON)*100)/100;
-    console.log(`The average wind speed is: ${average_windSpeed} mph`);
+    console.log(`\nThe average wind speed is: ${average_windSpeed} mph`);
 
   //bit forecast part to determine average forecast
     //weather forecast 
@@ -318,187 +411,138 @@ async function checkWeather(username, gridX, gridY, station) {
   			}
   		}
   	}
-	    generateArticles(average_weather,weather_forecast_mode,average_windSpeed, username);
+	  generateArticles(average_weather,weather_forecast_mode,average_windSpeed, username);
+    }
   });
-
 }
 
-// generates an outfit based on the temprature inputted
+//generates clothing articles randomly based on the average weather
 async function generateArticles(averageWeather, weatherForecastMode, averageWindSpeed, username){ 
   //sets the arrays for different types of articles one can wear in different seasons
   let winter_tops = ["long_sleeve_shirt", "sweater"];
   let summer_tops = ["t_shirt", "tank_top"];
   let winter_bottoms = ["sweats", "winter_skirt", "jeans"];
-  let summer_bottoms = ["jeans", "summer_skirt"];
-   let extra_layer = ["jacket", "coat"];
-    let summer_accessories =["summer_hat"];
-    let winter_accessories = ["winter_hat"];
-    let random_summer_accessory = "";
-    let random_winter_accessory = "";
-    let random_extra_layer = "";
-    //selects a random article from the array to put in an outfit
-  
+  let summer_bottoms = ["jeans", "skirt"];
+  let extra_layer = ["jacket", "coat"];
+  let summer_accessories =["summer_hat"];
+  let winter_accessories = ["winter_hat"];
+  let random_summer_accessory = "";
+  let random_winter_accessory = "";
+  let random_extra_layer = "";  
   //checks the forecast weather against different temperatures and selects a random item from the array for that clothing article 
-    let random_top = "";
-    let random_bottom = "";
-    if(averageWeather <32){
-       random_top = random_item(winter_tops);
-       random_bottom = random_item(winter_bottoms);
-       random_accessory = random_item(winter_accessories);
-      random_extra_layer = random_item(extra_layer);}
-    else if(averageWeather<=55){
-       random_top = random_item(winter_tops);
-       random_bottom = random_item(winter_bottoms);
-      random_accessory = "no hat today";
-      random_extra_layer = random_item(extra_layer);}
-    else if(averageWeather<=75){
-       random_top = random_item(summer_tops);
-       random_bottom = random_item(winter_bottoms);
-       random_accessory = "no accessories today";
-      random_extra_layer = random_item(extra_layer);}
-    else if(averageWeather<=100){
-       random_top = random_item(summer_tops);
-       random_bottom = random_item(summer_bottoms);
-       random_summer_accessory = random_item(summer_accessories);
-      random_extra_layer = "no extra layer today";}
-    else if(averageWeather>100){
-       random_top = random_item(summer_tops);
-       random_bottom = random_item(summer_bottoms);
-       random_accessory = random_item(summer_accessories);
-      random_extra_layer = "no extra layer, it's way too hot!";}
+  let random_top = "";
+  let random_bottom = "";
+  if(averageWeather <32){
+    random_top = random_item(winter_tops);
+    random_bottom = random_item(winter_bottoms);
+    random_accessory = random_item(winter_accessories);
+    random_extra_layer = random_item(extra_layer);}
+  else if(averageWeather<=55){
+    random_top = random_item(winter_tops);
+    random_bottom = random_item(winter_bottoms);
+    random_accessory = "no hat today";
+    random_extra_layer = random_item(extra_layer);}
+  else if(averageWeather<=75){
+    random_top = random_item(summer_tops);
+    random_bottom = random_item(winter_bottoms);
+    random_accessory = "no accessories today";
+    random_extra_layer = random_item(extra_layer);}
+  else if(averageWeather<=100){
+    random_top = random_item(summer_tops);
+    random_bottom = random_item(summer_bottoms);
+    random_summer_accessory = random_item(summer_accessories);
+    random_extra_layer = "no extra layer today";}
+  else if(averageWeather>100){
+    random_top = random_item(summer_tops);
+    random_bottom = random_item(summer_bottoms);
+    random_accessory = random_item(summer_accessories);
+    random_extra_layer = "no extra layer, it's way too hot!";}
 
-  makeOutfit(averageWeather, username, random_top, random_bottom, random_accessory, random_extra_layer);
-    //checkAll(averageWeather, username, random_top, random_bottom);
-   
+  makeOutfit(averageWeather, username, random_top, random_bottom, random_accessory, random_extra_layer);   
 }
-
-// async function checkAll(averageWeather, username, random_top, random_bottom){
-//   let extra_layer = ["a jacket", "a coat"];
-//   let summer_accessories =["a summer hat"];
-//   let winter_accessories = ["a winter hat"];
-//   let random_summer_accessory = "";
-//   let random_winter_accessory = "";
-//   random_extra_layer = random_item(extra_layer);
-//   random_summer_accessory = random_item(summer_accessories);
-//   random_winter_accessory = random_item(winter_accessories);
-//   if(averageWeather <= 55){
-//     checkWinterTop(averageWeather, username, random_top, random_bottom, random_winter_accessory, random_extra_layer);
-//   }
-//   else{
-//     checkedSummerTop(averageWeather, username, random_top, random_bottom, random_summer_accessory);
-//   }
-// }
-
-// function checkWinterTop(averageWeather, username, random_top, random_bottom, random_winter_accessory, random_extra_layer){
-//   let checked_winter_top = ""; 
-//   checked_winter_top = checkDB(random_top, username);
-//   console.log("checked_wintertop is...: " + checked_winter_top);
-//   checkWinterBottom(averageWeather, username, random_top, random_bottom, random_winter_accessory, random_extra_layer, checked_winter_top);
-// }
-
-// function checkWinterBottom(averageWeather, username, random_top, random_bottom, checked_winter_top) {
-//   let checked_winter_bottom = "";
-//   checked_winter_bottom = checkDB(random_bottom, username);
-//   checkWinterAccessory(averageWeather, username, random_top, random_bottom, checked_winter_top, checked_winter_bottom);
-// }
-
-// function checkWinterAccessory(averageWeather, username, random_top, random_bottom, checked_winter_top, checked_winter_bottom, random_winter_accessory){
-//   let checked_winter_accessory = "";
-//   checked_winter_accessory = checkDB(random_winter_accessory);
-//   checkExtraLayer(averageWeather, username, random_top, random_bottom, checked_winter_top, checked_winter_bottom, checked_winter_accessory);
-// }
-
-// function checkExtraLayer (averageWeather, username, random_top, random_bottom, checked_winter_top, checked_winter_bottom, checked_winter_accessory, random_extra_layer) {
-//   let checked_extra_layer = "";
-//   checked_extra_layer = checkDB(random_extra_layer, username);
-//   makeOutfit(averageWeather, username, random_top, random_bottom, checked_winter_top, checked_winter_bottom, checked_winter_accessory, checked_extra_layer);
-// }
-
-// function checkedSummerTop(averageWeather, username, random_top, random_bottom, random_summer_accessory){
-//   let checked_summer_top = ""; 
-//   checked_summer_top = checkDB(random_top, username);
-//   checkSummerBottom(averageWeather, username, random_top, random_bottom, random_summer_accessory, checked_summer_top);
-// }
-// function checkSummerBottom(averageWeather, username, random_top, random_bottom, random_summer_accessory, checked_summer_top) {
-//   let checked_summer_bottom = "";
-//   checked_summer_bottom = checkDB(random_bottom, username);
-//   checkSummerAccessory(averageWeather, username, random_top, random_bottom, random_summer_accessory, checked_summer_top, checked_summer_bottom);
-// }
-
-
-// function checkSummerAccessory(averageWeather, username, random_top, random_bottom, random_summer_accessory, checked_summer_top, checked_summer_bottom){
-//   let checked_summer_accessory = "";
-//   checked_summer_accessory = checkDB(random_summer_accessory);
-//   makeOutfit(averageWeather, username, random_top, random_bottom, checked_summer_top, checked_summer_bottom, checked_summer_accessory, "0");
-// }
 
 //creates an outfit for the user given the weather forecast and the articles generated in the generateArticles function
 async function makeOutfit(averageWeather, username, random_top, random_bottom, random_accessory, random_extra_layer){ 
-    let outfit="";
-     accessory_num = Math.floor(Math.random()*3);
-     extra_layer_num = Math.floor(Math.random()*3); 
-    if(averageWeather <32){
-      if(accessory_num ==0 && extra_layer_num==0) {
-        outfit = random_top + " and " + random_bottom;
-        checkOutfit(outfit, averageWeather);
+  let outfit="";
+  accessory_num = Math.floor(Math.random()*3);
+  extra_layer_num = Math.floor(Math.random()*3); 
+  if(averageWeather <32){
+    if(accessory_num ==0 && extra_layer_num==0) {
+      outfit = "a " + random_top + " and " + random_bottom;
+      checkOutfit(outfit, averageWeather);
+        outfit=toString(outfit);
        db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
       }
       else if(accessory_num>0 && extra_layer_num==0) {
-        outfit = random_top + " and " + random_bottom + " with  " + random_accessory;
+        outfit = "a " + random_top + " and " + random_bottom + " with " + random_accessory;
+        
         checkOutfit(outfit, averageWeather);
+        outfit=toString(outfit);
         db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
         db.getArticle(username, random_accessory);
       }
       else if(accessory_num>0 && extra_layer_num >0){
-        outfit = random_top + " and " + random_bottom + " with  " + random_accessory + " and  " + random_extra_layer;
+        outfit = random_top + " and " + random_bottom + " with " + random_accessory + " and " + random_extra_layer;
       checkOutfit(outfit, averageWeather);
+        outfit=toString(outfit);
+        
         db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
         db.getArticle(username, random_accessory);
-        db.getArticle(usernmame, random_extra_layer);
+        db.getArticle(username, random_extra_layer);
       }
       else if(accessory_num==0 && extra_layer_num >0){
-        outfit = random_top + " and " + random_bottom + " with  " + random_extra_layer;
+        outfit = random_top + " and " + random_bottom + " with " + random_extra_layer;
+       
       checkOutfit(outfit, averageWeather);
+         outfit=toString(outfit);
         db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
-        db.getArticle(usernmame, random_extra_layer);
+        db.getArticle(username, random_extra_layer);
       }
      
       }
     else if(averageWeather<=55){
       if(extra_layer_num==0) {
-        outfit = "a" + random_top + " and " + random_bottom;
+        outfit = "a " + random_top + " and " + random_bottom;
+        
       checkOutfit(outfit, averageWeather);
+        outfit=toString(outfit);
         db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
       }
       else if (extra_layer_num>0) {
         outfit = "a " + random_top + " and " + random_bottom + " with " + random_extra_layer;
+        
         checkOutfit(outfit, averageWeather);
+        outfit=toString(outfit);
         db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
-        db.getArticle(usernmame, random_extra_layer);
+        db.getArticle(username, random_extra_layer);
       } 
     }
     else if(averageWeather<=75){
-      outfit = random_top + " and " + random_bottom;
+      outfit = "a " + random_top + " and " + random_bottom;
       checkOutfit(outfit, averageWeather);
+      outfit=toString(outfit);
        db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
     }
     else if(averageWeather<=100){
       if(accessory_num == 0){
-        outfit = random_top + " and " + random_bottom;
+        outfit = "a " + random_top + " and " + random_bottom;
         checkOutfit(outfit, averageWeather);
+        outfit=toString(outfit);
          db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
       }
       else if(accessory_num > 0){
-        outfit = random_top + " and " + random_bottom + " with  " + random_accessory;}
+        outfit = "a " + random_top + " and " + random_bottom + " with " + random_accessory;}
+      
       checkOutfit(outfit, averageWeather);
+      outfit=toString(outfit);
       db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
         db.getArticle(username, random_accessory);
@@ -507,45 +551,71 @@ async function makeOutfit(averageWeather, username, random_top, random_bottom, r
     else if(averageWeather>100){
       if(accessory_num == 0){
         outfit = random_top + " and " + random_bottom;
+        
         checkOutfit(outfit, averageWeather);
+        outfit=toString(outfit);
         db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
       }
       else if(accessory_num > 0){
-        outfit = random_top + " and " + random_bottom + " with  " + random_accessory;
+        outfit = random_top + " and " + random_bottom + " with " + random_accessory;
+        
         checkOutfit(outfit, averageWeather);
+        outfit=toString(outfit);
         db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
         db.getArticle(username, random_accessory); 
       }
-    } 
+    }
+    // willWear(username, outfit);
+    setTimeout(function(){ willWear(outfit, username, random_top, random_bottom, random_extra_layer, random_accessory); }, 2000);//this will delay 4 seconds and then runs willWear
 }
 
-function checkOutfit(outfit, averageWeather, random_top, random_bottom, random_accessory, random_extra_layer){
-  
+function checkOutfit(outfit, averageWeather, username){
+
+    let outfit_spaces = ""; 
     //else if(outfit.length>0){
-        console.log("Based on an average daily temperature of " + averageWeather + " degrees Farenheight, you should wear: " + outfit);
-      printClothesArt(outfit);
+      outfit_spaces = outfit.replaceAll("_", " ");
+        console.log("\nBased on an average daily temperature of " + averageWeather + " degrees Farenheight, you should wear: " + outfit_spaces + '\n'); 
+      printClothesArt(outfit, username);
      // }
 }
 
-//returns the count of a specific article of clothing in the closet
-async function checkDB(article, username) {
-  let promise = db.checkData(article, username)
-  .then((results) => {
-    print(results);
-  })
-}
-
-//checks if you can actually wear an item or if there aren't any of that item in the closet
-function print(numInCloset){
-if (numInCloset >= 1) {
-    console.log("You can wear it");
+function willWear(outfit, username, random_top, random_bottom, random_extra_layer, random_accessory) {
+  let willUserWear = prompt('Will you wear this outfit? (yes or no)');
+  willUserWear = willUserWear.toLowerCase();
+  if (willUserWear == 'yes' || willUserWear == 'y') {
+      db.wear(random_bottom, username);
+      db.wear(random_top, username);
+      db.wear(random_extra_layer, username);
+      db.wear(random_accessory, username);
+  }
+  else if (willUserWear == 'no' || willUserWear == 'n') {
+    // makeOutfit();
+    console.log("Try 1) View Daily Outfit again to get a different outfit.\n");
   }
   else {
-    console.log("None in closet");
+    console.log('Please input a valid choice, yes or no.\n');
   }
 }
+
+//returns the count of a specific article of clothing in the closet
+// async function checkDB(article, username) {
+//   let promise = db.checkData(article, username)
+//   .then((results) => {
+//     print(results);
+//   })
+// }
+
+// ////checks if you can actually wear an item or if there aren't any of that item in the closet
+// function print(numInCloset){
+// if (numInCloset >= 1) {
+//     console.log("You can wear it");
+//   }
+//   else {
+//     console.log("None in closet");
+//   }
+// }
       
 //select a random item from an array
 function random_item(arr){
@@ -557,8 +627,37 @@ function random_item(arr){
 }
 
 //ascii art for the clothes in the outfit
-async function printClothesArt(outfit){
-  
+async function printClothesArt(outfit, username){
+    if (outfit.includes("summer_hat")) {
+    console.log(`
+                       _____
+                    .-'     '-.
+                   /           \\
+                  |-.           |
+                  |  \\          |
+                  [__|__________|_______ 
+    `);
+  }
+  if (outfit.includes("winter_hat")) {
+    console.log(`
+                     .--------.
+                    /          '.
+                   |         .-. \\
+                   |         |  '.|
+                   |_________|   /|\\
+                  (___________)  |||
+    `);  
+  }
+   if (outfit.includes("jacket") || outfit.includes("coat")) {
+    console.log(`
+                      __   __    
+                     /  \\\-// \\   
+                    / |  |. | \\  
+                   / /|  |. |\\ \\ 
+                  /_/ |  |. | \\_\\
+                      |__|__|
+    `);
+  }
   if (outfit.includes("long_sleeve_shirt")) {
     console.log(`
                       __   __    
@@ -581,26 +680,8 @@ async function printClothesArt(outfit){
                      \\"===="//                       
     `);
   }
- if (outfit.includes("jacket") || outfit.includes("coat")) {
-    console.log(`
-                      __   __    
-                     /  \\\-//  \\   
-                    / |  |.  | \\  
-                   / /|  |.   |\ \\ 
-                  /_/ |  |.  | \_\\
-                      |__|__|
-    `);
-  }
- if (outfit.includes("jeans") || outfit.includes("sweats")) {
-    console.log(`
-                      ,==c==,
-                      |_/|\\_|
-                      |  |  |
-                      |  |  |
-                      |  |  |
-                      |__|__|
-    `);
-  }
+
+ 
  if (outfit.includes("t_shirt")) {
     console.log(`
                       __   __  
@@ -611,7 +692,7 @@ async function printClothesArt(outfit){
                       |_____|         
     `);
   }
-   if (outfit.includes("tank_top")) {
+  if (outfit.includes("tank_top")) {
     console.log(`
                       __   __  
                      |  '-'  |
@@ -621,27 +702,18 @@ async function printClothesArt(outfit){
                       |_____|
     `);
   }
-  if (outfit.includes("summer_hat")) {
+  if (outfit.includes("jeans") || outfit.includes("sweats")) {
     console.log(`
-                       _____
-                    .-'     '-.
-                   /           \\
-                  |-.           |
-                  |  \\          |
-                  [__|__________|_______ 
+                      ,==c==,
+                      |_/|\\_|
+                      |  |  |
+                      |  |  |
+                      |  |  |
+                      |__|__|
     `);
   }
-  if (outfit.includes("winter_hat")) {
-    console.log(`
-                     .--------.
-                    /          '.
-                   |         .-. \\
-                   |         |  '.|
-                   |_________|   /|\\
-                  (___________)  |||
-    `);  
-  }
-  if (outfit.includes("summer_skirt")) {
+ 
+  if (outfit.includes("skirt")) {
     console.log(`
                       =+===
                      / |.  \\
@@ -653,17 +725,17 @@ async function printClothesArt(outfit){
   }
   if (outfit.includes("winter_skirt")) {
     console.log(`
-                      =+===
-                     / |.  \\
-                    |  |.   |
-                    |  |.   |
-                    |  |.   |
-                    |  |.   |
-                    |  |.   |
-                    |_/_\\___|
+                       =+===
+                      / |.  \\
+                     |  |.   |
+                     |  |.   |
+                     |  |.   |
+                     |  |.   |
+                     |  |.   |
+                     |_/_\\___|
     `);
   }
-  console.log("Check to see if the outfit is in your closet. If not, generate a new outfit, do your laundry, or wear day-old clothes and be stinky.");
+  console.log("\nCheck to see if the outfit is in your closet. If it's not, generate a new outfit, do your laundry, or wear day-old clothes and be stinky.\n Here's how many you have of each article in the outfit: ");
 }
 
 //class to represent an article of clothing
@@ -770,11 +842,16 @@ class User {
   clean() {
     const clothes = ['long_sleeve_shirt','sweater','jacket','jeans','coat','tank_top', 'sweats', 'summer_hat','t_shirt','skirt', 'winter_hat', 'winter_skirt'];
     for(let i = 0; i < clothes.length; i++)
-      {db.clean(clothes[i], username);}
+      {db.clean(clothes[i], this.username);}
   }
   //will generate an outfit to recommend based on what is in their closet and what the weather is
   generateOutfit(username){
-    checkWeather(this.username, this.latitude, this.longitude, this.station);
+    username = this.username;
+    
+    //console.log(this.lat);
+    //console.log(this.long);
+    //console.log(this.station);
+    checkWeather(username, this.lat, this.long, this.station);
   }
   //return password value
   getPassword() {
@@ -786,7 +863,7 @@ class User {
   }
   //username value
   getUsername() {
-    return username;
+    return this.username;
   }
   //return longitude value
   getLongitude() {
@@ -860,7 +937,7 @@ class RCServer {
     verify(inputUser, inputPassword);
   }
   //adds a new user with their inputted data
-  addUser(username, password, email, zipcode) {
+  addUser(username, password, email, zipcode) {    
     latitude(username, password, email, zipcode);
   }
 }
