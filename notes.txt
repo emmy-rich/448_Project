@@ -15,7 +15,7 @@
 
 6. giveup after x amount of tries on all api calls
     - 3 tries should be the magic number before error is thrown
-    - implemented, but not tested. 
+    - implemented, and tested :-)
 
 
 --re-test all menu items

@@ -112,11 +112,12 @@ function driver(user){
       else if(input2 == 9){
         console.clear();
       }
-      //lets t
+      //lets the user know they inputted invalid input
       else{
         console.log("\nPlease enter a valid input\n")
         driver(user);
       }
+    //sets a stall so everything runs at the right time and in the right order
     if(input2 == 1 || input2==2 ||input2==3||input2==4||input2==5 || input2==6 ||input2==7 ||input2==9){
         setTimeout(function(){ driver(user); }, 4000);
       } 
@@ -465,7 +466,7 @@ async function generateArticles(averageWeather, weatherForecastMode, averageWind
     random_bottom = random_item(summer_bottoms);
     random_accessory = random_item(summer_accessories);
     random_extra_layer = "no extra layer, it's way too hot!";}
-
+  //makes an outfit with the items chosen
   makeOutfit(averageWeather, username, random_top, random_bottom, random_accessory, random_extra_layer);   
 }
 
@@ -474,6 +475,7 @@ async function makeOutfit(averageWeather, username, random_top, random_bottom, r
   let outfit="";
   accessory_num = Math.floor(Math.random()*3);
   extra_layer_num = Math.floor(Math.random()*3); 
+  //checks if the weather is colder than 32 degrees
   if(averageWeather <32){
     if(accessory_num ==0 && extra_layer_num==0) {
       outfit = "a " + random_top + " and " + random_bottom;
@@ -512,7 +514,7 @@ async function makeOutfit(averageWeather, username, random_top, random_bottom, r
       }
      
       }
-    /
+    //assigns outfit when average temp is 55 and under
     else if(averageWeather<=55){
       if(extra_layer_num==0) {
         outfit = "a " + random_top + " and " + random_bottom;
@@ -532,6 +534,7 @@ async function makeOutfit(averageWeather, username, random_top, random_bottom, r
         db.getArticle(username, random_extra_layer);
       } 
     }
+      //assigns outfit if average temp is 75 and under
     else if(averageWeather<=75){
       outfit = "a " + random_top + " and " + random_bottom;
       checkOutfit(outfit, averageWeather);
@@ -539,6 +542,7 @@ async function makeOutfit(averageWeather, username, random_top, random_bottom, r
        db.getArticle(username, random_bottom);
       db.getArticle(username, random_top);
     }
+      //assigns outfit if average temp is 100 or under
     else if(averageWeather<=100){
       if(accessory_num == 0){
         outfit = "a " + random_top + " and " + random_bottom;
@@ -557,6 +561,7 @@ async function makeOutfit(averageWeather, username, random_top, random_bottom, r
         db.getArticle(username, random_accessory);
         
       }
+      //assigns outfit if average temp is over 100
     else if(averageWeather>100){
       if(accessory_num == 0){
         outfit = random_top + " and " + random_bottom;
@@ -576,22 +581,19 @@ async function makeOutfit(averageWeather, username, random_top, random_bottom, r
         db.getArticle(username, random_accessory); 
       }
     }
-    // willWear(username, outfit);
     setTimeout(function(){ willWear(outfit, username, random_top, random_bottom, random_extra_layer, random_accessory); }, 2000);//this will delay 4 seconds and then runs willWear
 }
 
+//formats the outfit for readability for the user and calls function to print art
 function checkOutfit(outfit, averageWeather, username){
+  let outfit_spaces = "";      
+  outfit_spaces = outfit.replaceAll("_", " ");
+  console.log("\nBased on an average daily temperature of " + averageWeather + " degrees Farenheight, you should wear: " + outfit_spaces + '\n'); 
+  printClothesArt(outfit, username);}
 
-    let outfit_spaces = ""; 
-    //else if(outfit.length>0){
-      outfit_spaces = outfit.replaceAll("_", " ");
-        console.log("\nBased on an average daily temperature of " + averageWeather + " degrees Farenheight, you should wear: " + outfit_spaces + '\n'); 
-      printClothesArt(outfit, username);
-     // }
-}
-
-//
-frunction willWear(outfit, username, random_top, random_bottom, random_extra_layer, random_accessory) {
+//asks the useprompts the user, asking if they will wear the generated
+//outfit or not. if yes, articles in outfit get added
+function willWear(outfit, username, random_top, random_bottom, random_extra_layer, random_accessory) {
   let willUserWear = prompt('Will you wear this outfit? (yes or no)');
   willUserWear = willUserWear.toLowerCase();
   if (willUserWear == 'yes' || willUserWear == 'y') {
