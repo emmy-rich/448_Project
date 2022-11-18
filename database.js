@@ -294,49 +294,8 @@ function addUser(username, password, email, zipcode, lat, long, station) {
     }
       })
       //creates a tables for the closet and laundry to be associated with the new user id
-      
-    // }
-    // catch(err){
-    //   console.log("Username or email is already taken. Try again \n");
-    // }
   })
 }
-
-
-
-// function addUser2(username, password, email, zipcode, lat, long, station) {
-//   //connects to the database
-//   let db = new sqlite3.Database('reelcoloset', (err) => {
-//     if (err) {
-//       return console.error(err.message);
-//     }
-//   });
-//   //Inserts all of the users information into the user information table, which makes a new user
-//   db.serialize(() => {
-//     db.run(`INSERT INTO user_info(username, password, email, zipcode, lat, long, station) VALUES('${username}', '${password}', '${email}', ${zipcode}, ${lat}, ${long}, '${station}')`)
-//     //gets the user id correlating with the username
-//     db.each(`SELECT user_id FROM user_info WHERE username = '${username}'`, (err, row) => {
-//       if (err) {
-//         throw err;
-//       }
-//       //creates a tables for the closet and laundry to be associated with the new user id
-//       db.serialize(() => {
-//         let id = JSON.stringify(row);
-//         id = parseInt(id.replace(/[^0-9]*/g, ''));
-//         db.run(`INSERT INTO closet(user_id)
-//               VALUES(${id})`)
-//         db.run(`INSERT INTO laundry(user_id)
-//               VALUES(${id})`)
-//         //closes the connection to the database
-//         db.close();
-//       })
-//     })
-    
-//   })
-// }
-
-
-
 
 //returns 0 if username and password combo is not in database 
 //and 1 if username and password combo is in database

@@ -64,7 +64,7 @@ function driver(user){
         user.getCloset();
         stop = true;
       }
-      //
+      //if option 3 is selected, the user can add an item to their closet
       else if(input2 == 3){
         console.log("Clothing Options: long_sleeve_shirt, sweater, t_shirt, tank_top, sweats, winter_skirt, jeans, skirt, jacket, coat, summer_hat, or winter_hat\n");
         let art = prompt("Which article would you like to add?: ");
@@ -76,35 +76,43 @@ function driver(user){
           console.log("Invalid input please make sure you have typed it correctly (underscores are necessary)\n");
         }
       }
+      //if option 4 is selected, the user can remove an item from their closet
       else if(input2 == 4){
         console.log("Clothing Options: long_sleeve_shirt, sweater, t_shirt, tank_top, sweats, winter_skirt, jeans, skirt, jacket, coat, summer_hat, or winter_hat\n");
         let art = prompt("Which article would you like to remove?: ");
+        //checks for valid input
         if(art == 'long_sleeve_shirt' || art == 'sweater'|| art== 't_shirt' || art== 'tank_top'|| art== 'sweats' || art== 'winter_skirt'|| art== 'jeans' || art== 'skirt'|| art== 'jacket'|| art== 'coat'|| art== 'summer_hat' || art =='winter_hat') {
         user.remove(art);}
         else{
           console.log("Invalid input please make sure you have typed it correctly (underscores are necessary)\n");
         }
       }
+      //if user selects option 5, it displays their laundry
       else if(input2 == 5){
          user.getLaundry();
       }
+      //if user selects option 6, it cleans their laundry
       else if(input2 == 6){
         user.clean();
       }
+      //if user selects option 7, it displays their profile
       else if(input2 == 7){
           console.log("Profile Information: ");
           console.log("Username: " + user.getUsername());
           console.log("Zipcode: " + user.getZipcode());
           console.log("Email: " + user.getEmail());
       }
+      //if user selects option 8, it logs the user out
       else if(input2 == 8){
         console.log("\nSuccessfully logged out!\n");
         loginDriver();
         stop_out_loop = true;
       }
+      //if the user selects option 9, it clears the console
       else if(input2 == 9){
         console.clear();
       }
+      //lets t
       else{
         console.log("\nPlease enter a valid input\n")
         driver(user);
@@ -504,6 +512,7 @@ async function makeOutfit(averageWeather, username, random_top, random_bottom, r
       }
      
       }
+    /
     else if(averageWeather<=55){
       if(extra_layer_num==0) {
         outfit = "a " + random_top + " and " + random_bottom;
@@ -581,7 +590,8 @@ function checkOutfit(outfit, averageWeather, username){
      // }
 }
 
-function willWear(outfit, username, random_top, random_bottom, random_extra_layer, random_accessory) {
+//
+frunction willWear(outfit, username, random_top, random_bottom, random_extra_layer, random_accessory) {
   let willUserWear = prompt('Will you wear this outfit? (yes or no)');
   willUserWear = willUserWear.toLowerCase();
   if (willUserWear == 'yes' || willUserWear == 'y') {
@@ -605,16 +615,6 @@ function willWear(outfit, username, random_top, random_bottom, random_extra_laye
 //   .then((results) => {
 //     print(results);
 //   })
-// }
-
-// ////checks if you can actually wear an item or if there aren't any of that item in the closet
-// function print(numInCloset){
-// if (numInCloset >= 1) {
-//     console.log("You can wear it");
-//   }
-//   else {
-//     console.log("None in closet");
-//   }
 // }
       
 //select a random item from an array
@@ -847,10 +847,6 @@ class User {
   //will generate an outfit to recommend based on what is in their closet and what the weather is
   generateOutfit(username){
     username = this.username;
-    
-    //console.log(this.lat);
-    //console.log(this.long);
-    //console.log(this.station);
     checkWeather(username, this.lat, this.long, this.station);
   }
   //return password value
