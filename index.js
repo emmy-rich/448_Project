@@ -2,7 +2,7 @@ require("dotenv").config();
 const db = require("./database.js");
 const prompt = require("prompt-sync")({sigint:true});
 const fetch = require("node-fetch-commonjs"); 
-//const db = require("./database.js");
+
 
 loginDriver();
 

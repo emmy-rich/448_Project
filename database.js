@@ -56,23 +56,23 @@ function wear(article, username) {
           db.run(`UPDATE closet SET ${article} = ${closetValue} WHERE user_id IN (SELECT user_id FROM user_info WHERE username = '${username}')`)
           //match and select each item in the laundry table to the specific username given as a parameter
           db.each(`SELECT laundry.${article} FROM laundry INNER JOIN user_info ON laundry.user_id = user_info.user_id WHERE user_info.username = '${username}'`, (err, row) => {
-            if (err) {
-              throw err;
-            }
+          if (err) {
+            throw err;
+          }
             //take the returned data row and stringify it, then transform it into an integer value and increments it by 1 to reflect the new value
-            db.serialize(() => {
-              let laundryValueString = JSON.stringify(row);
-              let laundryValue = parseInt(laundryValueString.replace(/[^0-9]*/g, '')) + 1;
+          db.serialize(() => {
+            let laundryValueString = JSON.stringify(row);
+            let laundryValue = parseInt(laundryValueString.replace(/[^0-9]*/g, '')) + 1;
               // update the value for the given article parameter within the specific user's laundry table to reflect the new value
-              db.run(`UPDATE laundry SET ${article} = ${laundryValue} WHERE user_id IN (SELECT user_id FROM user_info WHERE username = '${username}')`)
+            db.run(`UPDATE laundry SET ${article} = ${laundryValue} WHERE user_id IN (SELECT user_id FROM user_info WHERE username = '${username}')`)
               //close the database connection 
               db.close();
             })
           })
         }
         else {
-          //close the database connection if the closet value is less than 0
-          db.close();
+        //close the database connection if the closet value is less than 0
+          db.close();        
         }
       })
     })
