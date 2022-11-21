@@ -1,4 +1,8 @@
+require("dotenv").config();
+//console.log(process.env.apiKey);
 const db = require("./database.js");
+const prompt = require("prompt-sync")({sigint:true});
+const fetch = require("node-fetch-commonjs"); 
 
 loginDriver();
 // // latitude('george2', 'sup', 'hi@hi.net',66604);
@@ -235,7 +239,7 @@ async function latitude(username, password, email, zipcode){
             .then(data=> {
                   if (apiCounter == 3)
                   {
-                    console.log("\nFailed after three attempts. Closing.../n");
+                    console.log("\nFailed fetching Latitude after three attempts. Closing...");
                   }
               //console.log("apiCounter for latitude: " + apiCounter);
               
@@ -266,7 +270,7 @@ async function longitude(username, password, email, zipcode, latitude){
             .then(data=> {
                   if (apiCounter == 3)
                   {
-                    console.log("\nFailed after three attempts. Closing...\n");
+                    console.log("\nFailed fetching Longitude after three attempts. Closing...\n");
                   }
               //console.log("apiCounter for longitude: " + apiCounter);
               
@@ -297,7 +301,7 @@ async function station(username, password, email, zipcode, latitude, longitude){
               //console.log("apiCounter for station: " + apiCounter);
                   if (apiCounter == 3)
                   {
-                    console.log("\nFailed after three attempts. Closing...\n");
+                    console.log("\nFailed identifying weather station after three attempts. Closing...\n");
                   }       
           //api function calls itself if api call fails and api counter is less than 3
           if ((data.status >=400)&&(apiCounter<3)){

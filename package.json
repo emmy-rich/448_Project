@@ -8,9 +8,14 @@
   },
   "keywords": [],
   "author": "",
+  "type": "commonjs",
   "license": "ISC",
   "dependencies": {
-    "node-fetch": "^3.2.6",
-    "sqlite3": "^5.1.2"
+    "dotenv": "^16.0.3",
+    "node-fetch": "^3.3.0",
+    "node-fetch-commonjs": "^3.2.4",
+    "prompt-sync": "^4.2.0",
+    "sqlite3": "^5.1.2",
+    "yarn": "^1.22.19"
   }
 }
