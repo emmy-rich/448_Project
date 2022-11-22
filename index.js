@@ -614,7 +614,11 @@ function willWear(outfit, username, random_top, random_bottom, random_extra_laye
   if (willUserWear == 'yes' || willUserWear == 'y') {
     db.wear(random_bottom, username);
     db.wear(random_top, username);
+<<<<<<< HEAD
     if (random_extra_layer != "")
+=======
+    if(random_extra_layer != "")
+>>>>>>> mac_branch
       db.wear(random_extra_layer, username);
     if(random_accessory != "")
       db.wear(random_accessory, username);
