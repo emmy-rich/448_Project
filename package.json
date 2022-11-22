@@ -15,7 +15,7 @@
     "node-fetch": "^3.3.0",
     "node-fetch-commonjs": "^3.2.4",
     "prompt-sync": "^4.2.0",
-    "sqlite3": "^5.1.2",
+    "sqlite3": "https://github.com/mapbox/node-sqlite3/tarball/master",
     "yarn": "^1.22.19"
   }
 }
