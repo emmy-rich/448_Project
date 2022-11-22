@@ -463,23 +463,23 @@ async function generateArticles(averageWeather, weatherForecastMode, averageWind
   else if(averageWeather<=55) {
     random_top = random_item(winter_tops);
     random_bottom = random_item(winter_bottoms);
-    random_accessory = "no hat today";
+    random_accessory = "";
     random_extra_layer = random_item(extra_layer); }
   else if(averageWeather<=75) {
     random_top = random_item(summer_tops);
     random_bottom = random_item(winter_bottoms);
-    random_accessory = "no accessories today";
+    random_accessory = "";
     random_extra_layer = random_item(extra_layer); }
   else if(averageWeather<=100) {
     random_top = random_item(summer_tops);
     random_bottom = random_item(summer_bottoms);
     random_summer_accessory = random_item(summer_accessories);
-    random_extra_layer = "no extra layer today"; }
+    random_extra_layer = ""; }
   else if(averageWeather>100) {
     random_top = random_item(summer_tops);
     random_bottom = random_item(summer_bottoms);
     random_accessory = random_item(summer_accessories);
-    random_extra_layer = "no extra layer, it's way too hot!"; }
+    random_extra_layer = ""; }
   //makes an outfit with the items chosen
   makeOutfit(averageWeather, username, random_top, random_bottom, random_accessory, random_extra_layer);   
 }
@@ -614,8 +614,10 @@ function willWear(outfit, username, random_top, random_bottom, random_extra_laye
   if (willUserWear == 'yes' || willUserWear == 'y') {
     db.wear(random_bottom, username);
     db.wear(random_top, username);
-    db.wear(random_extra_layer, username);
-    db.wear(random_accessory, username);
+    if(random_extra_layer != "")
+      db.wear(random_extra_layer, username);
+    if(random_accessory != "")
+      db.wear(random_accessory, username);
     // setTimeout(function() { db.wear(random_bottom, username); }, 2000);
     // setTimeout(function() { db.wear(random_top, username); }, 2000);
     // setTimeout(function() { db.wear(random_extra_layer, username); }, 2000);
