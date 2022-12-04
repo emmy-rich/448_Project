@@ -1,5 +1,8 @@
 # 448_Project
 
+## Presentation Video
+[Link to our presentation](https://www.youtube.com/watch?v=2mwEGQUwC1w)
+
 ## Prototype
 
 This prototype uses the [NWS Weather API](https://www.weather.gov/documentation/services-web-api) to generate a random outfit and reminders based on the temperature of a users zipcode.
